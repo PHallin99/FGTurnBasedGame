@@ -8,6 +8,9 @@
         playersPerTurn = totalPlayersPerTurn;
     }
     
-    public void EndTurn() =>
+    public void EndTurn()
+    {
         playerTurnIndex = playerTurnIndex == playersPerTurn ? playerTurnIndex = 0 : playerTurnIndex++;
+        
+    }
 }

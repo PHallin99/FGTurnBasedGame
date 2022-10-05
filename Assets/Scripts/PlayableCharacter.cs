@@ -1,14 +1,34 @@
-﻿using UnityEngine;
+﻿using UI;
+using UnityEngine;
+using UnityEngine.Serialization;
 
-internal class PlayableCharacter : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))]
+public class PlayableCharacter : MonoBehaviour
 {
+    public Team team;
+    public Rigidbody Rigidbody { get; private set; }
+    public bool CanJump { get; private set; }
+
+    [SerializeField] private StatusText statusText;
+
     public PlayableCharacter(Team teamAssignment)
     {
         team = teamAssignment;
     }
-    
-    public Team team;
-    private int hitPoints;
+
+    private void Awake()
+    {
+        Rigidbody = GetComponent<Rigidbody>();
+        CanJump = false;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        CanJump = collision.gameObject.CompareTag("Floor");
+    }
+
+    public void FlipCanJump() => CanJump = !CanJump;
+    public StatusText StatusText => statusText;
 }
 
 public enum Team

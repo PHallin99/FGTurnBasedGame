@@ -23,7 +23,7 @@ To get VG do one of the following alternatives:
         - DONE - (G) Use the built in Character Controller. Add jumping.
         - DONE - (G) Has hit points
         - DONE - (VG, small) Implement a custom character controller to control the movement of the worm.
-        - DONE - (VG, small) A worm can only move a certain range 
+        - DONE - (VG, small) A worm can only move a certain range
         - TODO - (VG, medium) A player controls a team of (multiple worms)
     Camera
         - TODO - (G) Focus camera on active player

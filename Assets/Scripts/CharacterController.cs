@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Managers;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class CharacterController : MonoBehaviour
 {
@@ -11,8 +9,8 @@ public class CharacterController : MonoBehaviour
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] [Range(1, 1000)] private int moveLenghtMax;
-    public int moveLenght { get; private set; }
     private int characterIndex;
+    private int moveLenght;
     private Vector3 movementDirection;
 
     private void Start()
@@ -24,13 +22,13 @@ public class CharacterController : MonoBehaviour
 
     private void Update()
     {
-        movementDirection = InputManager.instance.GetMovementDirection();
+        movementDirection = InputManager.Instance.GetMovementDirection();
     }
 
     private void FixedUpdate()
     {
         if (movementDirection != Vector3.zero) MoveCharacter();
-        if (playableCharacters[characterIndex].CanJump && InputManager.instance.GetJumpInput())
+        if (playableCharacters[characterIndex].CanJump && InputManager.Instance.GetJumpInput())
             JumpCharacter();
     }
 

@@ -4,14 +4,14 @@ namespace Managers
 {
     public class InputManager : MonoBehaviour
     {
-        public static InputManager instance;
+        public static InputManager Instance;
 
         private Vector3 movementDirection;
         private bool shouldJump;
 
         private void Awake()
         {
-            instance = this;
+            Instance = this;
         }
 
         private void Update()
@@ -20,7 +20,6 @@ namespace Managers
             shouldJump = Input.GetKey(KeyCode.Space);
             if (GetTurnInput())
             {
-                
             }
         }
 
@@ -44,7 +43,7 @@ namespace Managers
             return movementInput;
         }
 
-        public bool GetTurnInput()
+        private static bool GetTurnInput()
         {
             return Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Return);
         }

@@ -1,13 +1,10 @@
 ﻿using UI;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayableCharacter : MonoBehaviour
 {
     public Team team;
-    public Rigidbody Rigidbody { get; private set; }
-    public bool CanJump { get; private set; }
 
     [SerializeField] private StatusText statusText;
 
@@ -15,6 +12,10 @@ public class PlayableCharacter : MonoBehaviour
     {
         team = teamAssignment;
     }
+
+    public Rigidbody Rigidbody { get; private set; }
+    public bool CanJump { get; private set; }
+    public StatusText StatusText => statusText;
 
     private void Awake()
     {
@@ -27,8 +28,10 @@ public class PlayableCharacter : MonoBehaviour
         CanJump = collision.gameObject.CompareTag("Floor");
     }
 
-    public void FlipCanJump() => CanJump = !CanJump;
-    public StatusText StatusText => statusText;
+    public void FlipCanJump()
+    {
+        CanJump = !CanJump;
+    }
 }
 
 public enum Team

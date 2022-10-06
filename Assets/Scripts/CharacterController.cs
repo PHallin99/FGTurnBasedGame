@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
-    [SerializeField] private List<PlayableCharacter> playableCharacters;
-
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] [Range(1, 1000)] private int moveLenghtMax;
+    private readonly List<PlayableCharacter> playableCharacters = new List<PlayableCharacter>();
     private int characterIndex;
     private int moveLenght;
     private Vector3 movementDirection;
@@ -22,13 +21,13 @@ public class CharacterController : MonoBehaviour
 
     private void Update()
     {
-        movementDirection = InputManager.Instance.GetMovementDirection();
+        movementDirection = Game.InputManager.GetMovementDirection();
     }
 
     private void FixedUpdate()
     {
         if (movementDirection != Vector3.zero) MoveCharacter();
-        if (playableCharacters[characterIndex].CanJump && InputManager.Instance.GetJumpInput())
+        if (playableCharacters[characterIndex].CanJump && Game.InputManager.GetJumpInput())
             JumpCharacter();
     }
 
@@ -40,11 +39,13 @@ public class CharacterController : MonoBehaviour
     public void NextCharacter()
     {
         characterIndex = characterIndex == playableCharacters.Count ? characterIndex = 0 : characterIndex++;
+        Game.CharacterSwapping.SwapCharacter(playableCharacters[characterIndex]);
     }
 
     public void PreviousCharacter()
     {
         characterIndex = characterIndex == 0 ? characterIndex = playableCharacters.Count : characterIndex--;
+        Game.CharacterSwapping.SwapCharacter(playableCharacters[characterIndex]);
     }
 
     private void JumpCharacter()

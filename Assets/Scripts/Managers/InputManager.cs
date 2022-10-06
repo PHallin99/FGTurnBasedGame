@@ -4,24 +4,23 @@ namespace Managers
 {
     public class InputManager : MonoBehaviour
     {
-        public static InputManager Instance;
-
         private Vector3 movementDirection;
         private bool shouldJump;
-
-        private void Awake()
-        {
-            Instance = this;
-        }
+        private bool inputEnabled = false;
 
         private void Update()
         {
+            if (!inputEnabled) return;
+
             movementDirection = GetMovementInput();
             shouldJump = Input.GetKey(KeyCode.Space);
             if (GetTurnInput())
             {
+                // TODO: After end turn input
             }
         }
+
+        public void InputEnabled(bool state) => inputEnabled = state;
 
         public Vector3 GetMovementDirection()
         {

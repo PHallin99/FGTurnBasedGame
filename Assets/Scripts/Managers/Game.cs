@@ -6,7 +6,7 @@ namespace Managers
     public class Game : MonoBehaviour
     {
         public static CharacterSwapping CharacterSwapping;
-        public static PlayerTurns PlayerTurns;
+        public static TurnManager TurnManager;
         public static InputManager InputManager;
 
         private void Awake()
@@ -37,7 +37,7 @@ namespace Managers
         private void InitializeGame()
         {
             CharacterSwapping = new CharacterSwapping();
-            PlayerTurns = new PlayerTurns();
+            TurnManager = GetComponentInChildren<TurnManager>();
             InputManager = GetComponentInChildren<InputManager>();
             LoadScene(1);
         }
@@ -51,6 +51,7 @@ namespace Managers
                     break;
                 case 1:
                     InputManager.InputEnabled(true);
+                    TurnManager.InitializeGame(2);
                     break;
                 case 2:
                     break;

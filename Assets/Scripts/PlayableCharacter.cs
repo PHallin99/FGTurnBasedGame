@@ -7,6 +7,7 @@ public class PlayableCharacter : MonoBehaviour
     public Team team;
 
     [SerializeField] private StatusText statusText;
+    [SerializeField] private Transform weaponTransform;
 
     public PlayableCharacter(Team teamAssignment)
     {
@@ -16,6 +17,7 @@ public class PlayableCharacter : MonoBehaviour
     public Rigidbody Rigidbody { get; private set; }
     public bool CanJump { get; private set; }
     public StatusText StatusText => statusText;
+    public Transform WeaponTransform => weaponTransform;
 
     private void Awake()
     {

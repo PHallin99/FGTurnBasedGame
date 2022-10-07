@@ -2,10 +2,10 @@
 
 public class CharacterSwapping
 {
-    private UnityEvent<PlayableCharacter> OnCharacterSwap;
+    private readonly UnityEvent<PlayableCharacter> onCharacterSwap = new UnityEvent<PlayableCharacter>();
 
     public void SwapCharacter(PlayableCharacter character)
     {
-        OnCharacterSwap.Invoke(character);
+        onCharacterSwap.Invoke(character);
     }
 }

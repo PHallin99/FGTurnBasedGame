@@ -326,6 +326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 0
   statusText: {fileID: 8985509251281957713}
+  weaponTransform: {fileID: 3396137829254889888}
 --- !u!54 &7610045269787664749
 Rigidbody:
   m_ObjectHideFlags: 0

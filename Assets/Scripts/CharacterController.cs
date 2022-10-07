@@ -11,11 +11,13 @@ public class CharacterController : MonoBehaviour
     private int characterIndex;
     private int moveLenght;
     private Vector3 movementDirection;
+    public PlayableCharacter CurrentCharacter { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         foreach (var child in GetComponentsInChildren<PlayableCharacter>()) playableCharacters.Add(child);
         characterIndex = 0;
+        CurrentCharacter = playableCharacters[characterIndex];
         moveLenght = moveLenghtMax;
     }
 
@@ -27,37 +29,39 @@ public class CharacterController : MonoBehaviour
     private void FixedUpdate()
     {
         if (movementDirection != Vector3.zero) MoveCharacter();
-        if (playableCharacters[characterIndex].CanJump && Game.InputManager.GetJumpInput())
+        if (CurrentCharacter.CanJump && Game.InputManager.GetJumpInput())
             JumpCharacter();
     }
 
     private void LateUpdate()
     {
-        playableCharacters[characterIndex].StatusText.UpdateText(moveLenght.ToString());
+        CurrentCharacter.StatusText.UpdateText(moveLenght.ToString());
     }
 
     public void NextCharacter()
     {
         characterIndex = characterIndex == playableCharacters.Count ? characterIndex = 0 : characterIndex++;
-        Game.CharacterSwapping.SwapCharacter(playableCharacters[characterIndex]);
+        CurrentCharacter = playableCharacters[characterIndex];
+        Game.CharacterSwapping.SwapCharacter(CurrentCharacter);
     }
 
     public void PreviousCharacter()
     {
         characterIndex = characterIndex == 0 ? characterIndex = playableCharacters.Count : characterIndex--;
-        Game.CharacterSwapping.SwapCharacter(playableCharacters[characterIndex]);
+        CurrentCharacter = playableCharacters[characterIndex];
+        Game.CharacterSwapping.SwapCharacter(CurrentCharacter);
     }
 
     private void JumpCharacter()
     {
-        playableCharacters[characterIndex].Rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        playableCharacters[characterIndex].FlipCanJump();
+        CurrentCharacter.Rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        CurrentCharacter.FlipCanJump();
     }
 
     private void MoveCharacter()
     {
         if (moveLenght <= 0) return;
-        playableCharacters[characterIndex].transform.Translate(movementDirection * movementSpeed * Time.fixedDeltaTime);
+        CurrentCharacter.transform.Translate(movementDirection * movementSpeed * Time.fixedDeltaTime);
         moveLenght--;
     }
 }

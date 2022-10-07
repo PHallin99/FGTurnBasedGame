@@ -4,9 +4,9 @@ namespace Managers
 {
     public class InputManager : MonoBehaviour
     {
+        private bool inputEnabled;
         private Vector3 movementDirection;
         private bool shouldJump;
-        private bool inputEnabled = false;
 
         private void Update()
         {
@@ -16,11 +16,14 @@ namespace Managers
             shouldJump = Input.GetKey(KeyCode.Space);
             if (GetTurnInput())
             {
-                // TODO: After end turn input
+                Game.TurnManager.EndTurn();
             }
         }
 
-        public void InputEnabled(bool state) => inputEnabled = state;
+        public void InputEnabled(bool state)
+        {
+            inputEnabled = state;
+        }
 
         public Vector3 GetMovementDirection()
         {

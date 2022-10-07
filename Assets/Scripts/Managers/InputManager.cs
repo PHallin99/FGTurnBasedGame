@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace Managers
 {
@@ -14,15 +15,13 @@ namespace Managers
 
             movementDirection = GetMovementInput();
             shouldJump = Input.GetKey(KeyCode.Space);
-            if (GetTurnInput())
-            {
-                Game.TurnManager.EndTurn();
-            }
         }
 
         public void InputEnabled(bool state)
         {
             inputEnabled = state;
+            movementDirection = Vector3.zero;
+            shouldJump = false;
         }
 
         public Vector3 GetMovementDirection()
@@ -45,9 +44,16 @@ namespace Managers
             return movementInput;
         }
 
-        private static bool GetTurnInput()
+        public bool GetEndTurnInput()
         {
-            return Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Return);
+            if (inputEnabled)
+                return Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Return);
+            return false;
+        }
+
+        public bool GetStartTurnInput()
+        {
+            return !inputEnabled && Input.GetKey(KeyCode.Backspace);
         }
     }
 }

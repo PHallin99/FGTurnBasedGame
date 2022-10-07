@@ -15,8 +15,8 @@ public class TurnManager : MonoBehaviour
 
     private void Update()
     {
-        if (!gameObject.activeSelf || !Input.GetKey(KeyCode.KeypadEnter)) return;
-        StartTurn();
+        if (!nextTurnText.gameObject.activeSelf && Game.InputManager.GetEndTurnInput()) EndTurn();
+        if (nextTurnText.gameObject.activeSelf && Game.InputManager.GetStartTurnInput()) StartTurn();
     }
 
     public void InitializeGame(int totalPlayersPerTurn)
@@ -30,11 +30,20 @@ public class TurnManager : MonoBehaviour
         Game.InputManager.InputEnabled(true);
     }
 
-    public void EndTurn()
+    private void EndTurn()
     {
-        playerTurnIndex = playerTurnIndex == playersPerTurn ? playerTurnIndex = 0 : playerTurnIndex++;
         nextTurnText.gameObject.SetActive(true);
-        nextTurnText.text = $"Player {playerTurnIndex + 1} turn! \n Press Enter To Start";
+        nextTurnText.text = $"Player {playerTurnIndex + 1} turn! \n Press Backspace To Start";
+        if (playerTurnIndex == playersPerTurn - 1)
+        {
+            playerTurnIndex = 0;
+        }
+
+        else
+        {
+            playerTurnIndex++;
+        }
+
         Game.InputManager.InputEnabled(false);
     }
 }

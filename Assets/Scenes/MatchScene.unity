@@ -517,8 +517,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCamera: {fileID: 432986179}
-  sensitivityHorizontal: 10
-  sensitivityVertical: 15
+  sensitivityHorizontal: 30
+  sensitivityVertical: 50
 --- !u!114 &432986179
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,12 +1,10 @@
 ﻿using Cinemachine;
+using Managers;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class CameraMovement : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
-    [FormerlySerializedAs("sensitivity")] [SerializeField] [Range(1, 15)] private float sensitivityHorizontal;
-    [FormerlySerializedAs("sensitivity")] [SerializeField] [Range(1, 15)] private float sensitivityVertical;
     private CharacterController charController;
 
     private void Awake()
@@ -24,10 +22,20 @@ public class CameraMovement : MonoBehaviour
     private void Update()
     {
         var currentCharacter = charController.CurrentCharacter;
-        var mouseY = Input.GetAxis("Mouse Y");
-        var mouseX = Input.GetAxis("Mouse X");
-        if (mouseY == 0 && mouseX == 0) return;
-        currentCharacter.transform.Rotate(Vector3.up, mouseX * sensitivityHorizontal * Time.deltaTime, Space.World);
-        currentCharacter.WeaponTransform.transform.Rotate(Vector3.right, -mouseY * sensitivityVertical * Time.deltaTime, Space.World);
+
+        currentCharacter.transform.Rotate(Vector3.up, Game.InputManager.GetMouseX(), Space.World);
+        currentCharacter.WeaponTransform.Rotate(Vector3.right, -Game.InputManager.GetMouseY());
+        currentCharacter.WeaponTransform.forward =
+            ClampVector(currentCharacter.WeaponTransform.forward, Vector3.zero, 22.5f);
+    }
+
+    private static Vector3 ClampVector(Vector3 direction, Vector3 center, float maxAngle)
+    {
+        var angle = Vector3.Angle(center, direction);
+        if (!(angle > maxAngle)) return direction;
+        direction.Normalize();
+        center.Normalize();
+        var rotation = (direction - center) / angle;
+        return rotation * maxAngle + center;
     }
 }

@@ -30,7 +30,7 @@ namespace Managers
         private void HandleTeamHpTexts()
         {
             team1Hp.text = $"Team 1: {teamsTracker.Team1Hp.ToString()}";
-            team2Hp.text = $"Team 2:{teamsTracker.Team2Hp.ToString()}";
+            team2Hp.text = $"Team 2: {teamsTracker.Team2Hp.ToString()}";
         }
 
         private void HandleChargeUpText()

@@ -1,13 +1,17 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+using Weapons;
 
 namespace Managers
 {
     public class Game : MonoBehaviour
     {
-        public static CharacterSwapping CharacterSwapping;
         public static InputManager InputManager;
-        private static TurnManager turnManager;
+        public static TurnManager TurnManager;
+        public static CharacterController CharacterController;
+        public static TeamsTracker TeamsTracker;
+        public static MatchUIManager MatchUIManager;
+        public static CameraMovement CameraMovement;
+        public static WeaponsHandler WeaponsHandler;
 
         private void Awake()
         {
@@ -19,44 +23,11 @@ namespace Managers
             InitializeGame();
         }
 
-        private void OnEnable()
-        {
-            SceneManager.sceneLoaded += SceneLoaded;
-        }
-
-        private void OnDisable()
-        {
-            SceneManager.sceneLoaded -= SceneLoaded;
-        }
-
-        private static void LoadScene(int sceneIndex)
-        {
-            SceneManager.LoadScene(sceneIndex);
-        }
-
         private void InitializeGame()
         {
-            CharacterSwapping = new CharacterSwapping();
-            turnManager = GetComponentInChildren<TurnManager>();
+            TurnManager = GetComponentInChildren<TurnManager>();
             InputManager = GetComponentInChildren<InputManager>();
-            LoadScene(1);
-        }
-
-        private static void SceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            var currentSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
-            switch (currentSceneBuildIndex)
-            {
-                case 0:
-                    break;
-                case 1:
-                    InputManager.InputEnabled(true);
-                    InputManager.ToggleMouseLocked();
-                    turnManager.InitializeGame(2);
-                    break;
-                case 2:
-                    break;
-            }
+            SceneLoader.LoadScene(1);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Cinemachine;
+﻿using System;
+using Cinemachine;
+using Enums;
 using Managers;
 using UnityEngine;
 
@@ -12,30 +14,41 @@ public class CameraMovement : MonoBehaviour
         charController = FindObjectOfType<CharacterController>();
     }
 
-    private void Start()
-    {
-        var characterTransform = charController.CurrentCharacter.transform;
-        virtualCamera.Follow = characterTransform;
-        virtualCamera.LookAt = characterTransform;
-    }
-
     private void Update()
     {
-        var currentCharacter = charController.CurrentCharacter;
-
-        currentCharacter.transform.Rotate(Vector3.up, Game.InputManager.GetMouseX(), Space.World);
-        currentCharacter.WeaponTransform.Rotate(Vector3.right, -Game.InputManager.GetMouseY());
-        currentCharacter.WeaponTransform.forward =
-            ClampVector(currentCharacter.WeaponTransform.forward, Vector3.zero, 22.5f);
+        HandleRotation();
     }
 
-    private static Vector3 ClampVector(Vector3 direction, Vector3 center, float maxAngle)
+    public void UpdateCamera()
     {
-        var angle = Vector3.Angle(center, direction);
-        if (!(angle > maxAngle)) return direction;
-        direction.Normalize();
-        center.Normalize();
-        var rotation = (direction - center) / angle;
-        return rotation * maxAngle + center;
+        switch (Game.TurnManager.gamePhase)
+        {
+            case GamePhase.PreAction:
+            {
+                var characterTransform = charController.CurrentCharacter.transform;
+                virtualCamera.Follow = characterTransform;
+                virtualCamera.LookAt = characterTransform;
+                break;
+            }
+            case GamePhase.PostAction when Game.TurnManager.ActionProjectile == null:
+                return;
+            case GamePhase.PostAction:
+            {
+                var projectile = Game.TurnManager.ActionProjectile.gameObject;
+                virtualCamera.Follow = projectile.transform;
+                virtualCamera.LookAt = projectile.transform;
+                break;
+            }
+            case GamePhase.TurnEnded:
+                virtualCamera.Follow = null;
+                virtualCamera.LookAt = null;
+                break;
+        }
+    }
+
+    private void HandleRotation()
+    {
+        // TODO: try transform.rotation.eulerAngles
+        charController.CurrentCharacter.transform.Rotate(Vector3.up, Game.InputManager.MouseAxisX, Space.World);
     }
 }

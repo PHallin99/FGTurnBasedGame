@@ -1,12 +1,21 @@
-﻿using Managers;
+﻿using System.Collections;
+using Enums;
+using Managers;
 using TMPro;
 using UnityEngine;
+using Weapons;
 
 public class TurnManager : MonoBehaviour
 {
     [SerializeField] private TMP_Text nextTurnText;
+    [SerializeField] private float turnPauseSeconds;
+
+    public GamePhase gamePhase = GamePhase.PreAction;
     private int playersPerTurn;
-    private int playerTurnIndex;
+
+    public Projectile ActionProjectile { get; private set; }
+
+    public int PlayerTurnIndex { get; private set; }
 
     private void Start()
     {
@@ -15,35 +24,87 @@ public class TurnManager : MonoBehaviour
 
     private void Update()
     {
-        if (!nextTurnText.gameObject.activeSelf && Game.InputManager.GetEndTurnInput()) EndTurn();
-        if (nextTurnText.gameObject.activeSelf && Game.InputManager.GetStartTurnInput()) StartTurn();
+        CheckTurnInputs();
     }
 
-    public void InitializeGame(int totalPlayersPerTurn)
+
+    private void CheckTurnInputs()
+    {
+        if (gamePhase == GamePhase.GameOver)
+        {
+            if (Game.InputManager.EndTurnPressed)
+            {
+                Application.Quit();
+            }
+
+            return;
+        }
+
+        switch (nextTurnText.gameObject.activeSelf)
+        {
+            case false when Game.InputManager.EndTurnPressed:
+                nextTurnText.gameObject.SetActive(true);
+                EndTurn();
+                break;
+            case true when Game.InputManager.StartTurnPressed:
+                nextTurnText.gameObject.SetActive(false);
+                StartTurn();
+                break;
+        }
+    }
+
+    public void SetPlayersPerTurn(int totalPlayersPerTurn)
     {
         playersPerTurn = totalPlayersPerTurn;
     }
 
+    public void EndTurnAction(Projectile projectile)
+    {
+        Game.InputManager.ActionInputsEnabled = false;
+        gamePhase = GamePhase.PostAction;
+        ActionProjectile = projectile;
+        Game.CameraMovement.UpdateCamera();
+    }
+
+    public void EndTurnPostAction()
+    {
+        StartCoroutine(EndTurnPause());
+    }
+
     private void StartTurn()
     {
-        nextTurnText.gameObject.SetActive(false);
-        Game.InputManager.InputEnabled(true);
+        gamePhase = GamePhase.PreAction;
+        Game.InputManager.SetInputEnabled(true);
+        Game.CameraMovement.UpdateCamera();
     }
 
     private void EndTurn()
     {
+        gamePhase = GamePhase.TurnEnded;
         nextTurnText.gameObject.SetActive(true);
-        nextTurnText.text = $"Player {playerTurnIndex + 1} turn! \n Press Backspace To Start";
-        if (playerTurnIndex == playersPerTurn - 1)
-        {
-            playerTurnIndex = 0;
-        }
+        nextTurnText.text = $"Player {PlayerTurnIndex + 1}'s turn! \n Press Backspace To Start";
+        Game.InputManager.SetInputEnabled(false);
+        Game.TeamsTracker.UpdateHp();
+        IteratePlayerTurnIndex();
+        Game.CharacterController.NewTurn();
+        Game.CharacterController.IterateCharacterIndex(
+            Game.CharacterController.PlayerIndexPlayableCharacters[PlayerTurnIndex]);
 
-        else
-        {
-            playerTurnIndex++;
-        }
+        Game.CameraMovement.UpdateCamera();
+    }
 
-        Game.InputManager.InputEnabled(false);
+    private void IteratePlayerTurnIndex()
+    {
+        PlayerTurnIndex++;
+        if (PlayerTurnIndex == playersPerTurn)
+        {
+            PlayerTurnIndex = 0;
+        }
+    }
+
+    private IEnumerator EndTurnPause()
+    {
+        yield return new WaitForSeconds(turnPauseSeconds);
+        EndTurn();
     }
 }

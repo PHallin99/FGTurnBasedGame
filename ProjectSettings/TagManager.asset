@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Floor
+  - PickUp
   layers:
   - Default
   - TransparentFX

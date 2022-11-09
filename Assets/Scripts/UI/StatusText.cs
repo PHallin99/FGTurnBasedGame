@@ -6,6 +6,7 @@ namespace UI
     public class StatusText : MonoBehaviour
     {
         [SerializeField] private TMP_Text textMeshPro;
+        [SerializeField] private PlayableCharacter character;
         private new Camera camera;
 
         private void Awake()
@@ -16,11 +17,12 @@ namespace UI
         private void LateUpdate()
         {
             transform.LookAt(camera.transform);
+            textMeshPro.text = character.Hp.ToString();
         }
 
-        public void UpdateText(string text)
+        public void UpdateStaminaUI(string text)
         {
-            textMeshPro.text = $"Stamina: {text}";
+            textMeshPro.text = text;
         }
     }
 }

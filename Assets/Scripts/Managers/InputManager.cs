@@ -7,39 +7,72 @@ namespace Managers
     {
         [SerializeField] [Range(1, 50)] private float sensitivityHorizontal;
         [SerializeField] [Range(1, 50)] private float sensitivityVertical;
-        private bool endTurnInput;
         private bool inputEnabled;
-        private float mouseAxisX;
         private float mouseAxisY;
-        private Vector3 movementDirection;
-        private bool shouldJump;
-        private bool startTurnInput;
+
+        public bool ActionInputsEnabled { get; set; }
+        public Vector3 MovementDirection { get; private set; }
+        public bool JumpPressing { get; private set; }
+        public float MouseAxisX { get; private set; }
+        public bool NextCharacterPressed { get; private set; }
+        public bool PrevCharacterPressed { get; private set; }
+        public bool PrimaryFirePressed { get; private set; }
+        public bool PrimaryFireReleased { get; private set; }
+        public bool SecondaryFirePressed { get; private set; }
+        public bool EndTurnPressed { get; private set; }
+        public bool StartTurnPressed { get; private set; }
+        public bool SecondaryFireReleased { get; private set; }
+        public bool ModifierPressed { get; private set; }
 
         private void Update()
         {
             if (!inputEnabled)
             {
-                startTurnInput = Input.GetKey(KeyCode.Backspace);
+                StartTurnPressed = Input.GetKey(KeyCode.Backspace);
             }
             else
             {
-                movementDirection = GetMovementInput();
-                shouldJump = Input.GetKey(KeyCode.Space);
-                mouseAxisY = Input.GetAxis("Mouse Y") * sensitivityVertical * Time.deltaTime;
-                mouseAxisX = Input.GetAxis("Mouse X") * sensitivityHorizontal * Time.deltaTime;
-                endTurnInput = Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Return);
+                ReadInputs();
+            }
+
+            if (ActionInputsEnabled)
+            {
+                ReadActionInputs();
             }
         }
 
-        public void InputEnabled(bool state)
+        private void ReadActionInputs()
         {
-            endTurnInput = !state;
+            PrimaryFirePressed = Input.GetKeyDown(KeyCode.Mouse0);
+            SecondaryFirePressed = Input.GetKeyDown(KeyCode.Mouse1);
+            PrimaryFireReleased = Input.GetKeyUp(KeyCode.Mouse0);
+            SecondaryFireReleased = Input.GetKeyUp(KeyCode.Mouse1);
+            EndTurnPressed = Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Return);
+            ModifierPressed = Input.GetKey(KeyCode.LeftControl);
+            NextCharacterPressed = Input.GetKeyDown(KeyCode.Tab);
+            PrevCharacterPressed = Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Tab);
+        }
+
+        private void ReadInputs()
+        {
+            MovementDirection = GetMovementInput();
+            JumpPressing = Input.GetKeyDown(KeyCode.Space);
+            mouseAxisY = Input.GetAxis("Mouse Y") * sensitivityVertical * Time.deltaTime;
+            MouseAxisX = Input.GetAxis("Mouse X") * sensitivityHorizontal * Time.deltaTime;
+        }
+
+        public void SetInputEnabled(bool state)
+        {
+            ActionInputsEnabled = state;
             inputEnabled = state;
-            mouseAxisX = state ? mouseAxisX : 0;
+            EndTurnPressed = !state;
+            MouseAxisX = state ? MouseAxisX : 0;
             mouseAxisY = state ? mouseAxisY : 0;
-            movementDirection = state ? movementDirection : Vector3.zero;
-            shouldJump = state;
-            startTurnInput = state;
+            MovementDirection = state ? MovementDirection : Vector3.zero;
+            JumpPressing = false;
+            PrimaryFirePressed = false;
+            StartTurnPressed = false;
+            ModifierPressed = false;
         }
 
         public static void ToggleMouseLocked()
@@ -58,16 +91,6 @@ namespace Managers
             }
         }
 
-        public Vector3 GetMovementDirection()
-        {
-            return movementDirection;
-        }
-
-        public bool GetJumpInput()
-        {
-            return shouldJump;
-        }
-
         private static Vector3 GetMovementInput()
         {
             var movementInput = new Vector3();
@@ -76,26 +99,6 @@ namespace Managers
             movementInput = Input.GetKey(KeyCode.E) ? movementInput + Vector3.right : movementInput;
             movementInput = Input.GetKey(KeyCode.S) ? movementInput + Vector3.back : movementInput;
             return movementInput;
-        }
-
-        public float GetMouseY()
-        {
-            return mouseAxisY;
-        }
-
-        public float GetMouseX()
-        {
-            return mouseAxisX;
-        }
-
-        public bool GetEndTurnInput()
-        {
-            return endTurnInput;
-        }
-
-        public bool GetStartTurnInput()
-        {
-            return startTurnInput;
         }
     }
 }

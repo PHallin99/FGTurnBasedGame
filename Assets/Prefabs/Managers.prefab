@@ -43,8 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a9ec41e3b614a0197ca784db095fa78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivityHorizontal: 50
-  sensitivityVertical: 50
+  sensitivityHorizontal: 100
 --- !u!1 &1666444203251215074
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,7 +324,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_fontColor: {r: 1, g: 0, b: 0.561501, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

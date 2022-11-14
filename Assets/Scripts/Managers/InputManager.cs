@@ -5,10 +5,8 @@ namespace Managers
 {
     public class InputManager : MonoBehaviour
     {
-        [SerializeField] [Range(1, 50)] private float sensitivityHorizontal;
-        [SerializeField] [Range(1, 50)] private float sensitivityVertical;
+        [SerializeField] [Range(1, 200)] private float sensitivityHorizontal;
         private bool inputEnabled;
-        private float mouseAxisY;
 
         public bool ActionInputsEnabled { get; set; }
         public Vector3 MovementDirection { get; private set; }
@@ -57,7 +55,6 @@ namespace Managers
         {
             MovementDirection = GetMovementInput();
             JumpPressing = Input.GetKeyDown(KeyCode.Space);
-            mouseAxisY = Input.GetAxis("Mouse Y") * sensitivityVertical * Time.deltaTime;
             MouseAxisX = Input.GetAxis("Mouse X") * sensitivityHorizontal * Time.deltaTime;
         }
 
@@ -67,7 +64,6 @@ namespace Managers
             inputEnabled = state;
             EndTurnPressed = !state;
             MouseAxisX = state ? MouseAxisX : 0;
-            mouseAxisY = state ? mouseAxisY : 0;
             MovementDirection = state ? MovementDirection : Vector3.zero;
             JumpPressing = false;
             PrimaryFirePressed = false;

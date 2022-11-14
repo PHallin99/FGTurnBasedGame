@@ -1,5 +1,4 @@
-﻿using System;
-using Cinemachine;
+﻿using Cinemachine;
 using Enums;
 using Managers;
 using UnityEngine;

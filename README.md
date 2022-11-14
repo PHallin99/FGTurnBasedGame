@@ -7,8 +7,8 @@ Play from the "Startup" unity scene. Make sure to click left or right click on t
 # INPUTS
 Mouse left: look left <br>
 Mouse right: look right <br>
-Mouse1: Select Primary weapon / Primary Fire <br>
-Mouse2: Select Secondary weapon / Secondary Fire <br>
+Mouse1: Select Primary weapon / Charge Primary Fire <br>
+Mouse2: Select Secondary weapon / Charge Secondary Fire <br>
 W: Move forward <br>
 Q: Move left <br>
 E: Move right <br>

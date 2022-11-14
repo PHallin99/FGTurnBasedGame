@@ -2,7 +2,7 @@
 Futuregames first assignment create a game similar to worms.
 
 # HOW TO PLAY IN EDITOR
-Play from the "Startup" unity scene.
+Play from the "Startup" unity scene. Make sure to click left or right click on the game window in the editor to properly lock mouse cursor to the screen after you have pressed play.
 
 # INPUTS
 Mouse1: Select Primary weapon / Primary Fire <br>
